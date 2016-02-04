@@ -1,6 +1,6 @@
 {
   "name": "pull-buffered",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "read buffered data from a pull-stream",
   "main": "index.js",
   "scripts": {

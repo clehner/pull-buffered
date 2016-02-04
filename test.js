@@ -78,3 +78,18 @@ tape('get data after lines', function (t) {
     })
   })
 })
+
+tape('get chunks of fixed length', function (t) {
+  var chunks = ['1234', '5678', 'abcd', '----']
+  var chunksStr = chunks.join('')
+  testMulti(t, chunksStr, function (t, b) {
+    pull(
+      b.chunks(4),
+      pull.collect(function (err, theChunks) {
+        t.error(err, 'no collect error')
+        t.deepEqual(theChunks.map(String), chunks, 'got the chunks')
+        t.end()
+      })
+    )
+  })
+})

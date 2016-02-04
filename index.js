@@ -1,5 +1,4 @@
 module.exports = function (read) {
-  var line = ''
   var nextBuf, _nextBuf
   var ended
 
@@ -14,6 +13,7 @@ module.exports = function (read) {
 
   function lines() {
     var _cb
+    var line = ''
 
     function next(end, buf) {
       var _line, i
@@ -41,6 +41,39 @@ module.exports = function (read) {
     }
   }
 
+  function chunks(len) {
+    var _cb
+    var chunks = []
+    var remaining = len
+
+    function next(end, buf) {
+      var _line, i
+      if (ended = end) {
+        _cb(end)
+      } else if (buf.length >= remaining) {
+        nextBuf = buf.slice(remaining)
+        chunks.push(buf.slice(0, remaining))
+        var data = Buffer.isBuffer(chunks[0]) ?
+          Buffer.concat(chunks, len) :
+          chunks.join('')
+        chunks.length = null
+        remaining = len
+        _cb(null, data)
+      } else {
+        chunks.push(buf)
+        remaining -= buf.length
+        read(null, next)
+      }
+    }
+
+    return function readChunk(abort, cb) {
+      if (ended) return cb(ended)
+      _cb = cb
+      readData(abort, next)
+    }
+  }
+
   readData.lines = lines
+  readData.chunks = chunks
   return readData
 }
