@@ -93,3 +93,34 @@ tape('get chunks of fixed length', function (t) {
     )
   })
 })
+
+tape('get stream of fixed length', function (t) {
+  var chunks = ['aaaaabbbbbccccc', 'morethings', 'foobarstuff']
+  var chunksStr = chunks.join('')
+  testMulti(t, chunksStr, function (t, b) {
+    pull(
+      b.take(chunks[0].length),
+      pull.collect(function (err, subchunks) {
+        t.error(err, 'no collect error')
+        t.equal(join(subchunks), chunks[0], 'got first chunk')
+        // get another
+        pull(
+          b.take(chunks[1].length),
+          pull.collect(function (err, subchunks) {
+            t.error(err, 'no collect error')
+            t.equal(join(subchunks), chunks[1], 'got second chunk')
+            // pass through the rest
+            pull(
+              b,
+              pull.collect(function (err, subchunks) {
+                t.error(err, 'no collect error')
+                t.equal(join(subchunks), chunks[2], 'got the rest')
+                t.end()
+              })
+            )
+          })
+        )
+      })
+    )
+  })
+})

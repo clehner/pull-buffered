@@ -73,7 +73,29 @@ module.exports = function (read) {
     }
   }
 
+  function take(len) {
+    var remaining = len
+    return function readChunk(abort, cb) {
+      if (ended || !remaining) return cb(ended || true)
+      readData(abort, function next(end, buf) {
+        var _line, i
+        if (ended = end) {
+          cb(end)
+        } else if (buf.length >= remaining) {
+          var _remaining = remaining
+          remaining = 0
+          nextBuf = buf.slice(_remaining)
+          cb(null, buf.slice(0, _remaining))
+        } else {
+          remaining -= buf.length
+          cb(null, buf)
+        }
+      })
+    }
+  }
+
   readData.lines = lines
   readData.chunks = chunks
+  readData.take = take
   return readData
 }
