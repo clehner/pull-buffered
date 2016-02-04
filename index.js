@@ -11,7 +11,7 @@ module.exports = function (read) {
       read(end, cb)
   }
 
-  function lines() {
+  function delimited(chr) {
     var _cb
     var line = ''
 
@@ -21,7 +21,7 @@ module.exports = function (read) {
         _cb(null, _line = line, line = '', _line)
       else if (end)
         _cb(end)
-      else if (~(i = buf.indexOf('\n'))) {
+      else if (~(i = buf.indexOf(chr))) {
         if (i + 1 < buf.length)
           nextBuf = buf.slice(i + 1)
         var chunk = Buffer.isBuffer(buf)
@@ -39,6 +39,10 @@ module.exports = function (read) {
       _cb = cb
       readData(abort, next)
     }
+  }
+
+  function lines() {
+    return delimited('\n')
   }
 
   function chunks(len) {
@@ -95,6 +99,7 @@ module.exports = function (read) {
   }
 
   readData.lines = lines
+  readData.delimited = delimited
   readData.chunks = chunks
   readData.take = take
   return readData

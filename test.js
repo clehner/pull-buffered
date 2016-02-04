@@ -33,6 +33,20 @@ tape('get lines', function (t) {
   })
 })
 
+tape('get words', function (t) {
+  var lines = ['apple', 'pie', 'house']
+  testMulti(t, lines.join(' '), function (t, b) {
+    pull(
+      b.delimited(' '),
+      pull.collect(function (err, theLines) {
+        t.error(err, 'no collect error')
+        t.deepEqual(theLines, lines, 'got same words')
+        t.end()
+      })
+    )
+  })
+})
+
 function join(things) {
   return Buffer.isBuffer(things[0])
     ? Buffer.concat(things).toString('ascii')
