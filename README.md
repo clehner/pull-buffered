@@ -29,14 +29,26 @@ pull(
 pull(
   b.take(10),
   pull.collect(function (err, chunks) {
-    console.log('got first 10 characters', chunks.join(''))
+    console.log('got the first 10 characters', chunks.join(''))
+  })
+)
+```
+
+### Mix and match
+```js
+b.lines()(null, function (end, line) {
+  console.log('got first line with length', line)
+  var len = parseInt(line, 10)
+  b.chunks(len)(end, function (end, buf) {
+    console.log('got chunk with length ' + len + ':', buf)
     pull(
       b, // Pass-through the rest
       pull.collect(function (err, chunks) {
         console.log('got the rest', chunks.join(''))
       })
+    )
   })
-)
+})
 ```
 
 ## License
