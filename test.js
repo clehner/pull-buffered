@@ -27,7 +27,7 @@ tape('get lines', function (t) {
   var lines = ['abcdef', 'foobar', 'stuff']
   testMulti(t, lines.join('\n'), function (t, b) {
     pull(
-      b.lines(),
+      b.lines,
       pull.collect(function (err, theLines) {
         t.error(err, 'no collect error')
         t.deepEqual(theLines, lines, 'got same lines')
@@ -76,7 +76,7 @@ tape('get data after lines', function (t) {
   testMulti(t, lines.join('\n'), function (t, b) {
 
     // read the first two lines
-    var readLine = b.lines()
+    var readLine = b.lines
     readLine(null, function (end, line) {
       t.error(end, 'stream not ended')
       t.equal(line, lines[0], 'first line')

@@ -2,6 +2,7 @@ module.exports = function () {
   var _read
   var nextBuf, _nextBuf
   var ended
+  var readLine
 
   function readData(end, cb) {
     if (ended)
@@ -42,8 +43,8 @@ module.exports = function () {
     }
   }
 
-  function lines() {
-    return delimited('\n')
+  function lines(abort, cb) {
+    (readLine || (readLine = delimited('\n')))(abort, cb)
   }
 
   function chunks(len) {

@@ -15,7 +15,7 @@ pull(
 ### Read line by line
 ```js
 pull(
-  b.lines(),
+  b.lines,
   pull.drain(function (line) {
     console.log('got line', line)
   })
@@ -44,7 +44,7 @@ pull(
 
 ### Mix and match
 ```js
-b.lines()(null, function (end, line) {
+b.lines(null, function (end, line) {
   console.log('got first line with length', line)
   var len = parseInt(line, 10)
   b.chunks(len)(end, function (end, buf) {
