@@ -1,11 +1,19 @@
 # pull-buffered
 
-Wrap a [pull-stream](https://github.com/dominictarr/pull-stream) so that it can be read from in useful buffered ways.
+Transform a [pull-stream](https://github.com/dominictarr/pull-stream) so that
+it can be read from in useful buffered ways.
+
+```js
+var b = pullBuffered()
+
+pull(
+  source,
+  b
+)
+```
 
 ### Read line by line
 ```js
-var b = pullBuffered(source)
-
 pull(
   b.lines(),
   pull.drain(function (line) {

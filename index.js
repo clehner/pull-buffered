@@ -1,4 +1,5 @@
-module.exports = function (read) {
+module.exports = function () {
+  var _read
   var nextBuf, _nextBuf
   var ended
 
@@ -8,7 +9,7 @@ module.exports = function (read) {
     else if (nextBuf)
       cb(end, _nextBuf = nextBuf, nextBuf = null, _nextBuf)
     else
-      read(end, cb)
+      _read(end, cb)
   }
 
   function delimited(chr) {
@@ -30,7 +31,7 @@ module.exports = function (read) {
         _cb(null, _line = line + chunk, line = '', _line)
       } else {
         line += buf.toString('ascii')
-        read(null, next)
+        _read(null, next)
       }
     }
 
@@ -66,7 +67,7 @@ module.exports = function (read) {
       } else {
         chunks.push(buf)
         remaining -= buf.length
-        read(null, next)
+        _read(null, next)
       }
     }
 
@@ -98,9 +99,15 @@ module.exports = function (read) {
     }
   }
 
-  readData.lines = lines
-  readData.delimited = delimited
-  readData.chunks = chunks
-  readData.take = take
-  return readData
+  function sink(read) {
+    _read = read
+  }
+
+  sink.passthrough = readData
+  sink.lines = lines
+  sink.delimited = delimited
+  sink.chunks = chunks
+  sink.take = take
+
+  return sink
 }

@@ -6,10 +6,14 @@ function testMulti(t, str, test) {
   function test2(name, strs) {
     t.test(name, function (t) {
       t.test('string stream', function (t) {
-        test(t, buffered(pull.values(strs)))
+        var b = buffered()
+        pull(pull.values(strs), b)
+        test(t, b)
       })
       t.test('buffer stream', function (t) {
-        test(t, buffered(pull.values(strs.map(Buffer))))
+        var b = buffered()
+        pull(pull.values(strs.map(Buffer)), b)
+        test(t, b)
       })
       t.end()
     })
@@ -57,7 +61,7 @@ tape('get data', function (t) {
   var str = 'abcdefaoidjfaosdf\naosdifjasdfo\nbadoia'
   testMulti(t, str, function (t, b) {
     pull(
-      b,
+      b.passthrough,
       pull.collect(function (err, bufs) {
         t.error(err, 'no collect error')
         t.equal(join(bufs), str, 'got same data')
@@ -82,7 +86,7 @@ tape('get data after lines', function (t) {
 
         // pass through the rest
         pull(
-          b,
+          b.passthrough,
           pull.collect(function (err, bufs) {
             t.equal(join(bufs), lines[2], 'got the rest as data')
             t.end()
@@ -125,7 +129,7 @@ tape('get stream of fixed length', function (t) {
             t.equal(join(subchunks), chunks[1], 'got second chunk')
             // pass through the rest
             pull(
-              b,
+              b.passthrough,
               pull.collect(function (err, subchunks) {
                 t.error(err, 'no collect error')
                 t.equal(join(subchunks), chunks[2], 'got the rest')
