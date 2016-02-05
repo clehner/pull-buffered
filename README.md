@@ -51,6 +51,12 @@ b.lines()(null, function (end, line) {
 })
 ```
 
+## See also
+
+- [pull-header](https://github.com/dominictarr/pull-header)
+- [pull-reader](https://github.com/dominictarr/pull-reader)
+- [pull-tobits](https://github.com/DamonOehlman/pull-tobits)
+
 ## License
 
 ISC
