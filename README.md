@@ -7,7 +7,7 @@ it can be read from in useful buffered ways.
 var b = pullBuffered()
 
 pull(
-  source,
+  bufferOrStringSource,
   b
 )
 ```
@@ -22,7 +22,7 @@ pull(
 )
 ```
 
-### Read a chunk of fixed size
+### Read chunks of fixed size
 ```js
 pull(
   b.chunks(5),
