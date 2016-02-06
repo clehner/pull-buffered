@@ -1,5 +1,5 @@
-module.exports = function () {
-  var _read
+module.exports = function (read) {
+  var _read = read
   var nextBuf, _nextBuf
   var ended
   var readLine
