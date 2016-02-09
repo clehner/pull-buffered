@@ -8,7 +8,7 @@ module.exports = function (read) {
     if (ended)
       cb(ended)
     else if (nextBuf)
-      cb(end, _nextBuf = nextBuf, nextBuf = null, _nextBuf)
+      cb(end, (_nextBuf = nextBuf, nextBuf = null, _nextBuf))
     else
       _read(end, cb)
   }
@@ -20,7 +20,7 @@ module.exports = function (read) {
     function next(end, buf) {
       var _line, i
       if ((ended = end) === true && line)
-        _cb(null, _line = line, line = '', _line)
+        _cb(null, (_line = line, line = '', _line))
       else if (end)
         _cb(end)
       else if (~(i = buf.indexOf(chr))) {
@@ -29,7 +29,7 @@ module.exports = function (read) {
         var chunk = Buffer.isBuffer(buf)
           ? buf.toString('ascii', 0, i)
           : buf.slice(0, i)
-        _cb(null, _line = line + chunk, line = '', _line)
+        _cb(null, (_line = line + chunk, line = '', _line))
       } else {
         line += buf.toString('ascii')
         _read(null, next)
