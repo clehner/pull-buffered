@@ -13,9 +13,10 @@ module.exports = function (read) {
       _read(end, cb)
   }
 
-  function delimited(chr) {
+  function delimited(chr, encoding) {
     var _cb
     var line = ''
+    if (!encoding) encoding = 'utf8'
 
     function next(end, buf) {
       var _line, i
@@ -27,11 +28,11 @@ module.exports = function (read) {
         if (i + 1 < buf.length)
           nextBuf = buf.slice(i + 1)
         var chunk = Buffer.isBuffer(buf)
-          ? buf.toString('ascii', 0, i)
+          ? buf.toString(encoding, 0, i)
           : buf.slice(0, i)
         _cb(null, (_line = line + chunk, line = '', _line))
       } else {
-        line += buf.toString('ascii')
+        line += buf.toString(encoding)
         _read(null, next)
       }
     }
